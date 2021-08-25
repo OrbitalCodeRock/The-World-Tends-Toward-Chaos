@@ -16,6 +16,7 @@ public class InitialMovement_Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //player_t = this.gameObject.GetComponent<Rigidbody2D>();
         player_t = this.gameObject.transform;
         up_key = this.gameObject.GetComponent<KeyBindings>().up_key;
         right_key = this.gameObject.GetComponent<KeyBindings>().right_key;
@@ -42,6 +43,25 @@ public class InitialMovement_Player : MonoBehaviour
         else if (Input.GetKey(left_key))
         {
             player_t.Translate(Vector3.left * Time.deltaTime * distancePerSecond);
+        } 
+    }
+    void FixedUpdate()
+    {
+       /* if (Input.GetKey(up_key))
+        {
+            player_t.AddForce(Vector2.up * Time.deltaTime * distancePerSecond, ForceMode2D.Impulse);
         }
+        else if (Input.GetKey(down_key))
+        {
+            player_t.AddForce(Vector2.down * Time.deltaTime * distancePerSecond, ForceMode2D.Impulse);
+        }
+        if (Input.GetKey(right_key))
+        {
+            player_t.AddForce(Vector2.right * Time.deltaTime * distancePerSecond, ForceMode2D.Impulse);
+        }
+        else if (Input.GetKey(left_key))
+        {
+            player_t.AddForce(Vector2.left * Time.deltaTime * distancePerSecond, ForceMode2D.Impulse);
+        } */
     }
 }
