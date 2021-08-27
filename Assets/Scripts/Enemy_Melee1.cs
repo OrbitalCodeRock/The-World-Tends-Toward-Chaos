@@ -8,10 +8,12 @@ public class Enemy_Melee1 : MonoBehaviour
     public float avoidanceDistance;
     public float cornerAvoidance;
     public float speed = 40;
+    public float punchSpeed;
+    public float punchRange;
 
-    bool isClearingObstacle = false;
-    //bool enRoute = false;
+    bool retract = false;
     Transform Obstacle;
+    Transform fist;
     Vector3 topRight;
     Vector3 bottomRight;
     Vector3 topLeft;
@@ -27,14 +29,15 @@ public class Enemy_Melee1 : MonoBehaviour
     void Start()
     {
         obstacleMask = LayerMask.GetMask("Obstacles");
+        fist = this.transform.GetChild(0);
+        
     }
-
     // Update is called once per frame
     void Update()
     {
         Vector3 EnemyToPlayer = player_t.position - this.transform.position;
         RaycastHit2D hit = Physics2D.Raycast(this.transform.position, EnemyToPlayer.normalized, EnemyToPlayer.magnitude, obstacleMask);
-        if(hit.collider != null && (hit.transform.position - this.transform.position).magnitude > avoidanceDistance)
+        if(hit.collider != null && (hit.transform.position - this.transform.position).sqrMagnitude > avoidanceDistance * avoidanceDistance)
         {
             
                 
@@ -57,22 +60,23 @@ public class Enemy_Melee1 : MonoBehaviour
             float smallestVal = playerTo_topRight;
             foreach(float f in playerTo)
             {
-                if (f < smallestVal || smallestVal == f) smallestVal = f;
+                if (f < smallestVal) smallestVal = f;
             }
-            if(smallestVal == playerTo_topRight)
+            if(smallestVal == playerTo_topRight || smallestVal == playerTo_topLeft)
             {
-                if(this.transform.position.x > Obstacle.position.x)
+                if(this.transform.position.y < topLeft.y)
                 {
-                    this.transform.position = Vector3.MoveTowards(this.transform.position, topRight, Time.deltaTime * speed);
+
+                    this.transform.position = Vector3.MoveTowards(this.transform.position, topLeft, Time.deltaTime * speed);
                 }
                 else
                 {
-                    this.transform.position = Vector3.MoveTowards(this.transform.position, topLeft, Time.deltaTime * speed);
+                    this.transform.position = Vector3.MoveTowards(this.transform.position, topRight, Time.deltaTime * speed);
                 }
             }
             else if(smallestVal == playerTo_topLeft)
             {
-                if (this.transform.position.x < Obstacle.position.x)
+                if (this.transform.position.y < topRight.y)
                 {
                     this.transform.position = Vector3.MoveTowards(this.transform.position, topRight, Time.deltaTime * speed);
                 }
@@ -83,19 +87,19 @@ public class Enemy_Melee1 : MonoBehaviour
             }
             else if (smallestVal == playerTo_bottomRight)
             {
-                if (this.transform.position.x > Obstacle.position.x)
+                if (this.transform.position.y > bottomLeft.y)
                 {
-                    this.transform.position = Vector3.MoveTowards(this.transform.position, bottomRight, Time.deltaTime * speed);
+                    this.transform.position = Vector3.MoveTowards(this.transform.position, bottomLeft, Time.deltaTime * speed);
                 }
                 else
                 {
-                    this.transform.position = Vector3.MoveTowards(this.transform.position, bottomLeft, Time.deltaTime * speed);
+                    this.transform.position = Vector3.MoveTowards(this.transform.position, bottomRight, Time.deltaTime * speed);
                 }
             }
             else if (smallestVal == playerTo_bottomLeft)
             {
-                if (this.transform.position.x < Obstacle.position.x)
-                {
+                if (this.transform.position.y > bottomRight.y)
+                { 
                     this.transform.position = Vector3.MoveTowards(this.transform.position, bottomRight, Time.deltaTime * speed);
                 }
                 else
@@ -106,9 +110,24 @@ public class Enemy_Melee1 : MonoBehaviour
         }
         else
         {
-            isClearingObstacle = false;
             this.transform.position = Vector3.MoveTowards(this.transform.position, player_t.position, Time.deltaTime * speed);
+            if ((player_t.position - this.transform.position).sqrMagnitude <= punchRange * punchRange && retract == false)
+            {
+                fist.position = Vector3.MoveTowards(fist.position, player_t.position, Time.deltaTime * punchSpeed);
+            }
+            else if (retract || (player_t.position - this.transform.position).sqrMagnitude > punchRange * punchRange)
+            {
+               if (fist.position == this.transform.position)
+                {
+                    retract = false;
+                }
+                fist.position = Vector3.MoveTowards(fist.position, this.transform.position, Time.deltaTime * punchSpeed);
+            }
+            
         }
     }
-
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (fist.position != this.transform.position) { retract = true; }
+    }
 }
