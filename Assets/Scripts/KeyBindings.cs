@@ -8,6 +8,7 @@ public class KeyBindings : MonoBehaviour
     public KeyCode right_key = KeyCode.D;
     public KeyCode down_key = KeyCode.S;
     public KeyCode left_key = KeyCode.A;
+    public KeyCode dash_key = KeyCode.LeftShift;
     public KeyCode fire_key = KeyCode.Mouse0;
 
     // Start is called before the first frame update

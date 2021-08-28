@@ -5,7 +5,7 @@ using UnityEngine;
 public class BulletScript : MonoBehaviour
 {
     public float speed;
-    public int damage;
+    public float damage;
     Vector3 direction;
     Vector3 MousePos;
     // Start is called before the first frame update

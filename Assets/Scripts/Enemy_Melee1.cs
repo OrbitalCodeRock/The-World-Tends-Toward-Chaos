@@ -8,8 +8,12 @@ public class Enemy_Melee1 : MonoBehaviour
     public float avoidanceDistance;
     public float cornerAvoidance;
     public float speed = 40;
+
+    public float damage = 10;
     public float punchSpeed;
     public float punchRange;
+    public float punchDelay;
+    public double lastPunch;
 
     bool retract = false;
     Transform Obstacle;
@@ -28,6 +32,7 @@ public class Enemy_Melee1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player_t = GameObject.FindGameObjectWithTag("Player").transform;
         obstacleMask = LayerMask.GetMask("Obstacles");
         fist = this.transform.GetChild(0);
         
@@ -117,17 +122,17 @@ public class Enemy_Melee1 : MonoBehaviour
             }
             else if (retract || (player_t.position - this.transform.position).sqrMagnitude > punchRange * punchRange)
             {
-               if (fist.position == this.transform.position)
+               if (fist.position.x == this.transform.position.x)
                 {
                     retract = false;
                 }
-                fist.position = Vector3.MoveTowards(fist.position, this.transform.position, Time.deltaTime * punchSpeed);
+                fist.position = Vector3.MoveTowards(fist.position, new Vector3(this.transform.position.x, this.transform.position.y, fist.position.z), Time.deltaTime * punchSpeed);
             }
-            
         }
-    }
+        fist.position = new Vector3(fist.position.x, fist.position.y, -0.101f);
+    } 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (fist.position != this.transform.position) { retract = true; }
+        if (fist.position.x != this.transform.position.x) {retract = true; }
     }
 }
