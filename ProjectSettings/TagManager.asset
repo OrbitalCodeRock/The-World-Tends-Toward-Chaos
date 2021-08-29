@@ -7,6 +7,11 @@ TagManager:
   - Wall
   - Bullet
   - Enemy_Melee1
+  - PlayerBullet
+  - HealthPickup
+  - FireRatePowerUp
+  - DamagePowerUp
+  - timeSurvived
   layers:
   - Default
   - TransparentFX

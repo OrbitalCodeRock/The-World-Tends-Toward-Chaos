@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletScript : MonoBehaviour
+public class ProjectileTowardsMouse : MonoBehaviour
 {
     public float speed;
     public float damage;
@@ -22,10 +22,6 @@ public class BulletScript : MonoBehaviour
     {
         //this.GetComponent<Rigidbody2D>().AddForce(direction * Time.deltaTime * speed, ForceMode2D.Impulse);
         transform.Translate(direction * Time.deltaTime * speed);
-    }
-    private void OnBecameInvisible()
-    {
-        Destroy(this.gameObject);
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {

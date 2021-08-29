@@ -133,6 +133,6 @@ public class Enemy_Melee1 : MonoBehaviour
     } 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (fist.position.x != this.transform.position.x) {retract = true; }
+        if (fist.position.x != this.transform.position.x || fist.position.y != this.transform.position.y) {retract = true; }
     }
 }

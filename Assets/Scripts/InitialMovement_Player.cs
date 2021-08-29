@@ -58,7 +58,7 @@ public class InitialMovement_Player : MonoBehaviour
             staminaBar.sizeDelta = new Vector2(Mathf.Clamp(staminaBarSize_x * stamina / maxStamina, 0, staminaBarSize_x), staminaBar.sizeDelta.y);
             yield return new WaitForSeconds(depletionRate);
         }
-        distancePerSecond = regularSpeed;
+        distancePerSecond /= dashMultiplier;
         StartCoroutine(regainStamina(1, regenMagnitude));
 
     }
